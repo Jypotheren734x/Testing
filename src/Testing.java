@@ -1,24 +1,71 @@
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.stage.Stage;
+import com.jcraft.jsch.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
 
 /**
  * JAVA FX chart generator method Nickolas Komarnitsky u0717854
  *
  */
-public class Testing extends Application {
+public class Testing {
+	public static void main(String[] args) {
+		String SFTPHOST = "192.168.0.61";
+		int SFTPPORT = 22;
+		String SFTPUSER = "jypotheren";
+		String SFTPPASS = "Ki5vmrv4aaet84";
+		String SFTPWORKINGDIR = "/home/jypotheren/testing";
 
-	public static void main(String[] args) {launch(args);}
+		Session session = null;
+		Channel channel = null;
+		ChannelSftp channelSftp = null;
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		SampleTestClass stc = new SampleTestClass();
-		ListView<Button> root = new ListView<>(stc.elements);
-		Scene scene = new Scene(root);
-		primaryStage.setScene(scene);
-		primaryStage.show();
-
+		try {
+			JSch jsch = new JSch();
+			session = jsch.getSession(SFTPUSER, SFTPHOST, SFTPPORT);
+			session.setPassword(SFTPPASS);
+			UserInfo ui = new MyUserInfo(){
+				public void showMessage(String message){
+					JOptionPane.showMessageDialog(null, message);
+				}
+				public boolean promptYesNo(String message){
+					Object[] options={ "yes", "no" };
+					int foo=JOptionPane.showOptionDialog(null,
+							message,
+							"Warning",
+							JOptionPane.DEFAULT_OPTION,
+							JOptionPane.WARNING_MESSAGE,
+							null, options, options[0]);
+					return foo==0;
+				}
+			};
+			session.setUserInfo(ui);
+			session.connect();
+			channel = session.openChannel("sftp");
+			channel.connect();
+			channelSftp = (ChannelSftp) channel;
+			channelSftp.cd(SFTPWORKINGDIR);
+			File f = new File("file1");
+			channelSftp.put(new FileInputStream(f), f.getName());
+			System.out.println("File sent");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	public static abstract class MyUserInfo
+			implements UserInfo, UIKeyboardInteractive{
+		public String getPassword(){ return null; }
+		public boolean promptYesNo(String str){ return false; }
+		public String getPassphrase(){ return null; }
+		public boolean promptPassphrase(String message){ return false; }
+		public boolean promptPassword(String message){ return false; }
+		public void showMessage(String message){ }
+		public String[] promptKeyboardInteractive(String destination,
+												  String name,
+												  String instruction,
+												  String[] prompt,
+												  boolean[] echo){
+			return null;
+		}
 	}
 }
