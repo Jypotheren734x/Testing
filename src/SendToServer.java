@@ -16,6 +16,7 @@ public class SendToServer {
 		Session session = null;
 		Channel channel = null;
 		ChannelSftp channelSftp = null;
+		ChannelExec channelExec = null;
 
 		try {
 			JSch jsch = new JSch();
@@ -47,6 +48,15 @@ public class SendToServer {
 			channelSftp.put(new FileInputStream(f), f.getName());
 			channelSftp.put(new FileInputStream(t), t.getName());
 			System.out.println("Files sent");
+			channelSftp.disconnect();
+			channelExec = (ChannelExec) session.openChannel("exec");
+			BufferedReader in=new BufferedReader(new InputStreamReader(channelExec.getInputStream()));
+			channelExec.setCommand("cd " + SFTPWORKINGDIR +";pwd;javac -d classes *.java; java -cp classes Runner;");
+			channelExec.connect();
+			String msg=null;
+			while((msg=in.readLine())!=null){
+				System.out.println(msg);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
