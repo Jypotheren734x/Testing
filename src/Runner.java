@@ -17,13 +17,19 @@ public class Runner {
         try {
             FileWriter fw = new FileWriter(outputFile);
             PrintWriter pr = new PrintWriter(fw);
+            pr.println(map.size());
             map.forEach((s,l) ->{
+                pr.print("Test ");
+                pr.print("X-Axis ");
+                pr.print("Y-Axis ");
+                pr.print("Test ");
                 pr.print(s);
                 pr.println();
                 l.forEach((x,y)->{
-                    pr.print(x + " " +y);
+                    pr.print(x + " " + y);
                     pr.println();
                 });
+                pr.print("-----------------------");
             });
             pr.close();
         } catch (IOException e) {

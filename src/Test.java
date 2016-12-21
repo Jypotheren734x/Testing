@@ -16,7 +16,7 @@ public class Test{
     public Test(){
         series = new HashMap<>();
         HashMap<Integer, Integer> temp = new HashMap<>();
-        for(int i =0; i<10;i++){
+        for(int i =0; i<1000;i++){
             temp.put(i,i);
         }
         series.put("Series1", temp);
