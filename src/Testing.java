@@ -12,6 +12,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -39,7 +40,7 @@ public class Testing  extends Application {
     private int Rows = 0;
 
     DataForm dForm = null;
-    public GridPane root = new GridPane();
+    public VBox root = new VBox();
     TabPane tabPane = new TabPane();
     FileChooser chooser = new FileChooser();
 
@@ -58,13 +59,26 @@ public class Testing  extends Application {
             Tab tab = new Tab(file.getName());
             BuildGraph(file, tab);
         });
-        menuFile.getItems().add(open);
-        menuBar.getMenus().addAll(menuFile);
-        root.add(menuBar,0,0);
-        root.add(tabPane,0,1);
-        Scene scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
-        primaryStage.setFullScreen(true);
+        Menu menuView = new Menu("View");
+        MenuItem hidetable = new MenuItem("Hide Table");
+        MenuItem showtable = new MenuItem("Show Table");
+        hidetable.setOnAction(e ->{
+            dForm.hbox.getChildren().remove(dForm.sp);
+            hidetable.setDisable(true);
+            showtable.setDisable(false);
+        });
+        showtable.setOnAction(e ->{
+            dForm.hbox.getChildren().add(dForm.sp);
+            hidetable.setDisable(false);
+            showtable.setDisable(true);
+        });
+        menuFile.getItems().addAll(open);
+        menuView.getItems().addAll(hidetable, showtable);
+        menuBar.getMenus().addAll(menuFile, menuView);
+        root.getChildren().add(menuBar);
+        root.getChildren().add(tabPane);
+        root.autosize();
+        Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
 

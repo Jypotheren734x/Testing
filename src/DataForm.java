@@ -25,7 +25,8 @@ public class DataForm {
 
 	public LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
 
-	public HBox hbox;
+	public HBox hbox, table;
+	public ScrollPane sp;
 
 
 	@SuppressWarnings("unchecked")
@@ -46,8 +47,8 @@ public class DataForm {
 		lineChart.setCreateSymbols(false);
 
 		hbox = new HBox();
-		ScrollPane sp = new ScrollPane();
-		HBox table = new HBox();
+		sp = new ScrollPane();
+		table = new HBox();
 
 		HBox.setHgrow(lineChart, Priority.ALWAYS);
 		hbox.getChildren().add(lineChart);
