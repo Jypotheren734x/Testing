@@ -6,28 +6,30 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class DataForm {
-	private Stage stage = new Stage();
-
 	private CategoryAxis xAxis = new CategoryAxis();
 	private NumberAxis yAxis = new NumberAxis();
 
-	private LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
+	public LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
+
+	public HBox hbox;
+
 
 	@SuppressWarnings("unchecked")
 	public DataForm(String title, String xAxisLabel, String yAxisLabel, String lineChartTitle, HashMap<String, ObservableList<Data>> data) {
-		stage.setTitle(title);
-
 		for(String s : data.keySet()){
 			Series temp = new Series();
 			temp.setName(s);
@@ -43,12 +45,12 @@ public class DataForm {
 		lineChart.setTitle(lineChartTitle);
 		lineChart.setCreateSymbols(false);
 
-		HBox root = new HBox();
+		hbox = new HBox();
 		ScrollPane sp = new ScrollPane();
 		HBox table = new HBox();
 
 		HBox.setHgrow(lineChart, Priority.ALWAYS);
-		root.getChildren().add(lineChart);
+		hbox.getChildren().add(lineChart);
 		for (ObservableList<XYChart.Data> l : data.values()) {
 			VBox c1 = new VBox();
 			VBox c2 = new VBox();
@@ -63,14 +65,8 @@ public class DataForm {
 		}
 		table.setSpacing(10);
 		sp.setContent(table);
-		root.getChildren().add(sp);
+		hbox.getChildren().add(sp);
 		sp.setHbarPolicy(ScrollBarPolicy.NEVER);
 		sp.setFitToWidth(true);
-		Scene scene = new Scene(root, 900, 600);
-		stage.setScene(scene);
-	}
-
-	public void show(){
-		stage.show();
 	}
 }

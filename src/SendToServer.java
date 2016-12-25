@@ -51,7 +51,7 @@ public class SendToServer {
 			channelSftp.disconnect();
 			channelExec = (ChannelExec) session.openChannel("exec");
 			BufferedReader in=new BufferedReader(new InputStreamReader(channelExec.getInputStream()));
-			channelExec.setCommand("cd " + SFTPWORKINGDIR +";pwd;javac -d classes *.java; java -cp classes Runner;");
+			channelExec.setCommand("cd " + SFTPWORKINGDIR +";pwd;javac -d classes *.java; java -cp classes Runner Output.graph;");
 			channelExec.connect();
 			String msg=null;
 			while((msg=in.readLine())!=null){
