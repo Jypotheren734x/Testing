@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public class Runner {
     public static void main(String[] args) throws IOException {
         Test test = new Test();
-        writeFile("Output.txt", test.series);
+        writeFile(args[0], test.series);
     }
     private static boolean writeFile(String outputFile, HashMap<String, HashMap<Integer, Integer>> map) throws IOException {
         try {

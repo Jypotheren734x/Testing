@@ -44,7 +44,7 @@ public class RecieveFromServer {
             channel.connect();
             channelSftp = (ChannelSftp) channel;
             channelSftp.cd(SFTPWORKINGDIR);
-            File f = new File("Output.txt");
+            File f = new File("Output.graph");
             channelSftp.get(f.getName(), new FileOutputStream(f));
             System.out.println("Files recieved");
         } catch (Exception ex) {
