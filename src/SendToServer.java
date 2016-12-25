@@ -7,6 +7,7 @@ import java.io.*;
 
 public class SendToServer {
 	public static void main(String[] args) {
+		promptYesNo("Send to Server?");
 		String SFTPHOST = "192.168.0.61";
 		int SFTPPORT = 22;
 		String SFTPUSER = "jypotheren";
@@ -60,6 +61,16 @@ public class SendToServer {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	public static boolean promptYesNo(String message){
+		Object[] options={ "yes", "no" };
+		int foo=JOptionPane.showOptionDialog(null,
+				message,
+				"Warning",
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.WARNING_MESSAGE,
+				null, options, options[0]);
+		return foo==0;
 	}
 	public static abstract class MyUserInfo
 			implements UserInfo, UIKeyboardInteractive{
