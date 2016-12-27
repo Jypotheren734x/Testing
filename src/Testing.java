@@ -74,7 +74,19 @@ public class Testing  extends Application {
             subTable.getItems().add(hidetable);
         });
         Menu graph = new Menu("Graph");
-        graph.getItems().addAll(series);
+        Menu axis = new Menu("Axis");
+        MenuItem xAxis = new MenuItem("X-Axis");
+        MenuItem yAxis = new MenuItem("Y-Axis");
+        xAxis.setOnAction(e ->{
+            EditAxis en = new EditAxis(dForm.lineChart.getXAxis());
+            en.show();
+        });
+        yAxis.setOnAction(e ->{
+            EditAxis en = new EditAxis(dForm.lineChart.getYAxis());
+            en.show();
+        });
+        axis.getItems().addAll(xAxis,yAxis);
+        graph.getItems().addAll(series, axis);
         subTable.getItems().add(hidetable);
         menuFile.getItems().addAll(open, SendToServer);
         menuView.getItems().add(subTable);
