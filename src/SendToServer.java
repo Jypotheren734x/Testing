@@ -1,12 +1,14 @@
 import com.jcraft.jsch.*;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 
 public class SendToServer {
-	public static void main(String[] args) {
+	public SendToServer(){
 		promptYesNo("Send to Server?");
 		String SFTPHOST = "192.168.0.61";
 		int SFTPPORT = 22;
@@ -48,18 +50,13 @@ public class SendToServer {
 			File t = new File("src/Test.java");
 			channelSftp.put(new FileInputStream(f), f.getName());
 			channelSftp.put(new FileInputStream(t), t.getName());
-			System.out.println("Files sent");
+			JOptionPane.showMessageDialog(null, "Files Sent");
 			channelSftp.disconnect();
 			channelExec = (ChannelExec) session.openChannel("exec");
-			BufferedReader in=new BufferedReader(new InputStreamReader(channelExec.getInputStream()));
-			channelExec.setCommand("cd " + SFTPWORKINGDIR +";pwd;javac -d classes *.java; java -cp classes Runner Output.graph;");
+			channelExec.setCommand("cd " + SFTPWORKINGDIR +";javac -d classes *.java; java -cp classes Runner Output.graph;");
 			channelExec.connect();
-			String msg=null;
-			while((msg=in.readLine())!=null){
-				System.out.println(msg);
-			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, ex);
 		}
 	}
 	public static boolean promptYesNo(String message){

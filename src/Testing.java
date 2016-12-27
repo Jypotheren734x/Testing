@@ -5,31 +5,14 @@ import javafx.scene.Scene;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.scene.control.Label;
 
-import java.awt.*;
-
-import javax.swing.plaf.FileChooserUI;
+import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
@@ -54,8 +37,10 @@ public class Testing  extends Application {
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File");
         MenuItem open = new MenuItem("Open");
+        MenuItem SendToServer = new MenuItem("Send to Server");
         Menu series = new Menu("Series");
         open.setOnAction(e ->{
+            try {
             File file = chooser.showOpenDialog(null);
             Tab tab = new Tab(file.getName());
             BuildGraph(file, tab);
@@ -67,6 +52,12 @@ public class Testing  extends Application {
                 });
                 series.getItems().add(ser);
             }
+            }catch (Exception exception){
+                JOptionPane.showMessageDialog(null, exception);
+            }
+        });
+        SendToServer.setOnAction(e ->{
+            SendToServer sts = new SendToServer();
         });
         Menu menuView = new Menu("View");
         Menu subTable = new Menu("Table");
@@ -85,7 +76,7 @@ public class Testing  extends Application {
         Menu graph = new Menu("Graph");
         graph.getItems().addAll(series);
         subTable.getItems().add(hidetable);
-        menuFile.getItems().addAll(open);
+        menuFile.getItems().addAll(open, SendToServer);
         menuView.getItems().add(subTable);
         menuBar.getMenus().addAll(menuFile, menuView, graph);
         root.getChildren().add(menuBar);

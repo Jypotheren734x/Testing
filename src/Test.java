@@ -1,11 +1,4 @@
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.scene.chart.XYChart.Data;
-
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 
 
 /**

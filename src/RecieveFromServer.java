@@ -1,8 +1,8 @@
 import com.jcraft.jsch.*;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by komar on 12/20/2016.

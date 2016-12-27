@@ -2,8 +2,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 
 /**
  * Created by komar on 12/20/2016.
