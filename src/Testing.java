@@ -92,6 +92,7 @@ public class Testing  extends Application {
         root.getChildren().add(tabPane);
         root.autosize();
         Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add("stylesheet.css");
         primaryStage.setScene(scene);
         primaryStage.show();
 
