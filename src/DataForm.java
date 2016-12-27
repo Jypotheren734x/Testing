@@ -17,6 +17,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DataForm {
@@ -28,6 +29,8 @@ public class DataForm {
 	public HBox hbox, table;
 	public ScrollPane sp;
 
+	public ArrayList<Series> series = new ArrayList<>();
+
 
 	@SuppressWarnings("unchecked")
 	public DataForm(String title, String xAxisLabel, String yAxisLabel, String lineChartTitle, HashMap<String, ObservableList<Data>> data) {
@@ -38,6 +41,7 @@ public class DataForm {
 				temp.getData().add(d);
 			}
 			lineChart.getData().add(temp);
+			series.add(temp);
 		}
 
 		xAxis.setLabel(xAxisLabel);

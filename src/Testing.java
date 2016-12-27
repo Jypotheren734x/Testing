@@ -54,27 +54,40 @@ public class Testing  extends Application {
         MenuBar menuBar = new MenuBar();
         Menu menuFile = new Menu("File");
         MenuItem open = new MenuItem("Open");
+        Menu series = new Menu("Series");
         open.setOnAction(e ->{
             File file = chooser.showOpenDialog(null);
             Tab tab = new Tab(file.getName());
             BuildGraph(file, tab);
+            for(XYChart.Series s : dForm.series){
+                MenuItem ser = new MenuItem(s.getName());
+                ser.setOnAction(e_->{
+                    EditSeries es = new EditSeries(s, tabPane.getSelectionModel().getSelectedItem());
+                    es.show();
+                });
+                series.getItems().add(ser);
+            }
         });
         Menu menuView = new Menu("View");
-        MenuItem hidetable = new MenuItem("Hide Table");
-        MenuItem showtable = new MenuItem("Show Table");
+        Menu subTable = new Menu("Table");
+        MenuItem hidetable = new MenuItem("Hide");
+        MenuItem showtable = new MenuItem("Show");
         hidetable.setOnAction(e ->{
             dForm.hbox.getChildren().remove(dForm.sp);
-            hidetable.setDisable(true);
-            showtable.setDisable(false);
+            subTable.getItems().remove(hidetable);
+            subTable.getItems().add(showtable);
         });
         showtable.setOnAction(e ->{
             dForm.hbox.getChildren().add(dForm.sp);
-            hidetable.setDisable(false);
-            showtable.setDisable(true);
+            subTable.getItems().remove(showtable);
+            subTable.getItems().add(hidetable);
         });
+        Menu graph = new Menu("Graph");
+        graph.getItems().addAll(series);
+        subTable.getItems().add(hidetable);
         menuFile.getItems().addAll(open);
-        menuView.getItems().addAll(hidetable, showtable);
-        menuBar.getMenus().addAll(menuFile, menuView);
+        menuView.getItems().add(subTable);
+        menuBar.getMenus().addAll(menuFile, menuView, graph);
         root.getChildren().add(menuBar);
         root.getChildren().add(tabPane);
         root.autosize();
