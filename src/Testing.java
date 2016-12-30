@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.stream.Stream;
@@ -38,6 +39,7 @@ public class Testing  extends Application {
         Menu menuFile = new Menu("File");
         MenuItem open = new MenuItem("Open");
         MenuItem SendToServer = new MenuItem("Send to Server");
+        MenuItem runLocally = new MenuItem("Run Locally");
         Menu series = new Menu("Series");
         open.setOnAction(e ->{
             try {
@@ -57,7 +59,14 @@ public class Testing  extends Application {
             }
         });
         SendToServer.setOnAction(e ->{
-            SendToServer sts = new SendToServer();
+            SendToServer sts = new SendToServer(JOptionPane.showInputDialog(null,"IP address"));
+        });
+        runLocally.setOnAction(e ->{
+            try {
+                Runner run = new Runner(JOptionPane.showInputDialog(null, "Filename"));
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         });
         Menu menuView = new Menu("View");
         Menu subTable = new Menu("Table");
@@ -88,7 +97,7 @@ public class Testing  extends Application {
         axis.getItems().addAll(xAxis,yAxis);
         graph.getItems().addAll(series, axis);
         subTable.getItems().add(hidetable);
-        menuFile.getItems().addAll(open, SendToServer);
+        menuFile.getItems().addAll(open, SendToServer, runLocally);
         menuView.getItems().add(subTable);
         menuBar.getMenus().addAll(menuFile, menuView, graph);
         root.getChildren().add(menuBar);

@@ -8,9 +8,8 @@ import java.io.InputStreamReader;
 
 
 public class SendToServer {
-	public SendToServer(){
+	public SendToServer(String SFTPHOST){
 		promptYesNo("Send to Server?");
-		String SFTPHOST = "192.168.0.61";
 		int SFTPPORT = 22;
 		String SFTPUSER = "jypotheren";
 		String SFTPPASS = "Ki5vmrv4aaet84";

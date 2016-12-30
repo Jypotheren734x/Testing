@@ -8,8 +8,11 @@ import java.util.HashMap;
  */
 public class Runner {
     public static void main(String[] args) throws IOException {
+        Runner run = new Runner(args[0]);
+    }
+    public Runner(String filename) throws IOException {
         Test test = new Test();
-        writeFile(args[0], test.series);
+        writeFile(filename+".graph", test.series);
     }
     private static boolean writeFile(String outputFile, HashMap<String, HashMap<Integer, Integer>> map) throws IOException {
         try {
