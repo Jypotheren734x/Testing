@@ -1,4 +1,12 @@
 import com.jcraft.jsch.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -8,12 +16,40 @@ import java.io.InputStreamReader;
 
 
 public class SendToServer {
-	public SendToServer(String SFTPHOST){
+
+	public SendToServer() {
+		Stage stage = new Stage();
+		GridPane root = new GridPane();
+		TextField host = new TextField();
+		host.setPromptText("Host");
+		TextField user = new TextField();
+		user.setPromptText("User");
+		PasswordField pass = new PasswordField();
+		pass.setPromptText("Pass");
+		TextField pwd = new TextField();
+		pwd.setPromptText("PWD");
+		Button send = new Button("Send");
+		send.setOnAction(e ->{
+			FileChooser fc = new FileChooser();
+			File file = fc.showOpenDialog(null);
+			SendToServer sts = new SendToServer(host.getText(),user.getText(),pass.getText(),pwd.getText(), file);
+		});
+		root.add(host,0,0);
+		root.add(user,0,1);
+		root.add(pass,1,1);
+		root.add(pwd,0,2);
+		root.add(send,0,3);
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.sizeToScene();
+		stage.show();
+	}
+	public SendToServer(String host, String user, String pwd, String password, File... files) {
 		promptYesNo("Send to Server?");
-		int SFTPPORT = 22;
-		String SFTPUSER = "jypotheren";
-		String SFTPPASS = "Ki5vmrv4aaet84";
-		String SFTPWORKINGDIR = "/home/jypotheren/testing";
+		int port = 22;
+		user = user;
+		password = password;
+		pwd = pwd;
 
 		Session session = null;
 		Channel channel = null;
@@ -22,8 +58,8 @@ public class SendToServer {
 
 		try {
 			JSch jsch = new JSch();
-			session = jsch.getSession(SFTPUSER, SFTPHOST, SFTPPORT);
-			session.setPassword(SFTPPASS);
+			session = jsch.getSession(user, host, port);
+			session.setPassword(password);
 			UserInfo ui = new MyUserInfo(){
 				public void showMessage(String message){
 					JOptionPane.showMessageDialog(null, message);
@@ -44,15 +80,14 @@ public class SendToServer {
 			channel = session.openChannel("sftp");
 			channel.connect();
 			channelSftp = (ChannelSftp) channel;
-			channelSftp.cd(SFTPWORKINGDIR);
-			File f = new File("src/Runner.java");
-			File t = new File("src/Test.java");
-			channelSftp.put(new FileInputStream(f), f.getName());
-			channelSftp.put(new FileInputStream(t), t.getName());
+			channelSftp.cd(pwd);
+			for(File f : files) {
+				channelSftp.put(new FileInputStream(f), f.getName());
+			}
 			JOptionPane.showMessageDialog(null, "Files Sent");
 			channelSftp.disconnect();
 			channelExec = (ChannelExec) session.openChannel("exec");
-			channelExec.setCommand("cd " + SFTPWORKINGDIR +";javac -d classes *.java; java -cp classes Runner Output.graph;");
+			channelExec.setCommand("cd " + pwd +";javac -d classes *.java; java -cp classes Runner Output.graph;");
 			channelExec.connect();
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, ex);

@@ -59,7 +59,7 @@ public class Testing  extends Application {
             }
         });
         SendToServer.setOnAction(e ->{
-            SendToServer sts = new SendToServer(JOptionPane.showInputDialog(null,"IP address"));
+            SendToServer sts = new SendToServer();
         });
         runLocally.setOnAction(e ->{
             try {
@@ -98,6 +98,7 @@ public class Testing  extends Application {
         MenuItem newTest = new MenuItem("New");
         newTest.setOnAction(e -> {
             Test t = new Test();
+            t.show();
         });
         test.getItems().addAll(newTest);
         axis.getItems().addAll(xAxis,yAxis);

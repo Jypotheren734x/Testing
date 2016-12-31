@@ -9,11 +9,11 @@ import java.io.FileOutputStream;
  */
 public class RecieveFromServer {
     public static void main(String[] args) {
-        String SFTPHOST = "192.168.0.61";
-        int SFTPPORT = 22;
-        String SFTPUSER = "jypotheren";
-        String SFTPPASS = "Ki5vmrv4aaet84";
-        String SFTPWORKINGDIR = "/home/jypotheren/testing";
+        String host = "192.168.0.61";
+        int port = 22;
+        String user = "jypotheren";
+        String pass = "Ki5vmrv4aaet84";
+        String pwd = "/home/jypotheren/testing";
 
         Session session = null;
         Channel channel = null;
@@ -21,8 +21,8 @@ public class RecieveFromServer {
 
         try {
             JSch jsch = new JSch();
-            session = jsch.getSession(SFTPUSER, SFTPHOST, SFTPPORT);
-            session.setPassword(SFTPPASS);
+            session = jsch.getSession(user, host, port);
+            session.setPassword(pass);
             UserInfo ui = new SendToServer.MyUserInfo(){
                 public void showMessage(String message){
                     JOptionPane.showMessageDialog(null, message);
@@ -43,10 +43,9 @@ public class RecieveFromServer {
             channel = session.openChannel("sftp");
             channel.connect();
             channelSftp = (ChannelSftp) channel;
-            channelSftp.cd(SFTPWORKINGDIR);
+            channelSftp.cd(pwd);
             File f = new File("Output.graph");
             channelSftp.get(f.getName(), new FileOutputStream(f));
-            System.out.println("Files recieved");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
