@@ -17,7 +17,7 @@ public class Runner {
     }
     public Runner(String filename) throws IOException {
         this.filename = filename;
-        Test test = new Test(progressForm);
+        TestExample test = new TestExample(progressForm);
         writeFile(filename+".graph", test.series);
     }
     private static boolean writeFile(String outputFile, HashMap<String, HashMap<Integer, Long>> map) throws IOException {

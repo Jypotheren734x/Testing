@@ -94,12 +94,18 @@ public class Testing  extends Application {
             EditAxis en = new EditAxis(dForm.lineChart.getYAxis());
             en.show();
         });
+        Menu test = new Menu("Test");
+        MenuItem newTest = new MenuItem("New");
+        newTest.setOnAction(e -> {
+            Test t = new Test();
+        });
+        test.getItems().addAll(newTest);
         axis.getItems().addAll(xAxis,yAxis);
         graph.getItems().addAll(series, axis);
         subTable.getItems().add(hidetable);
         menuFile.getItems().addAll(open, SendToServer, runLocally);
         menuView.getItems().add(subTable);
-        menuBar.getMenus().addAll(menuFile, menuView, graph);
+        menuBar.getMenus().addAll(menuFile, menuView, graph, test);
         root.getChildren().add(menuBar);
         root.getChildren().add(tabPane);
         root.autosize();
