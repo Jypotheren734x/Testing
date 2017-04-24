@@ -5,14 +5,17 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
+
 /**
- * @Author Nickolas Komarnitsky
+ * @author Nickolas Komarnitsky
+ * Testing.Tests
+ * 4/24/2017
+ * 2:07 PM
  */
 public class Timing extends VBox{
 

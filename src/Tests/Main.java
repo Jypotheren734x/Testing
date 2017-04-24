@@ -4,11 +4,13 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.concurrent.Callable;
 
 
 /**
- * @Author Nickolas Komarnitsky
+ * @author Nickolas Komarnitsky
+ * Testing.Tests
+ * 4/24/2017
+ * 2:07 PM
  */
 public class Main extends Application {
 

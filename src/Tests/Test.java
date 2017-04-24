@@ -12,8 +12,12 @@ import java.io.PrintWriter;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
+
 /**
- * @Author Nickolas Komarnitsky
+ * @author Nickolas Komarnitsky
+ * Testing.Tests
+ * 4/24/2017
+ * 2:07 PM
  */
 public class Test<Type> extends Task<Type>{
     private PrintWriter pw;
@@ -32,10 +36,10 @@ public class Test<Type> extends Task<Type>{
     }
 
     /**
-     *
-     * @param callable
-     * @param max
-     * @param increment
+     * Creates a new basic test with callable function in it and desired max and increment
+     * @param callable - Callable method to test
+     * @param max - Max Number of Tests
+     * @param increment - Increment tests by ammount
      */
     public Test(Callable callable, int max, int increment){
         this.function = callable;
@@ -44,7 +48,10 @@ public class Test<Type> extends Task<Type>{
         updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
     }
 
-
+    /**
+     * Creates a new Basic test with callable function in it and defaul max and incremtn
+     * @param callable - Callable method to test
+     */
     public Test(Callable callable){
         this.function = callable;
         max_and_increment = new Pair<>(100,10);
@@ -52,6 +59,11 @@ public class Test<Type> extends Task<Type>{
         updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
     }
 
+    /**
+     * Creates new test with max and increment
+     * @param max - Max Number of Tests
+     * @param increment - Increment tests by ammount
+     */
     public Test(int max, int increment){
         max_and_increment = new Pair<>(max,increment);
         total = new Long(0);
@@ -67,6 +79,9 @@ public class Test<Type> extends Task<Type>{
         updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
     }
 
+    /**
+     * Opens setting window
+     */
     public void settings(){
         EditPrompt editPrompt = new EditPrompt(getMax(),getIncrement());
         max_and_increment = editPrompt.showPrompt();
@@ -117,25 +132,44 @@ public class Test<Type> extends Task<Type>{
         }
     }
 
+    /**
+     * updates progress for the current i based on the max
+     * @param i - current i
+     */
     public void updateProgress(int i){
         updateProgress(i,getMax());
         updateMessage("" + i+"/"+getMax());
     }
 
+    /**
+     * Sets a file writer for the test
+     * @param filename - File to write test data to
+     * @throws IOException
+     */
     public void setWriter(String filename) throws IOException {
         fw = new FileWriter(filename);
         pw = new PrintWriter(fw);
     }
 
+    /**
+     * Sets start to current nanotime
+     */
     public void start(){
         start = System.nanoTime();
     }
 
+    /**
+     * sets end to current nanotime and then add end -start to total
+     */
     public void end(){
         end = System.nanoTime();
         total += (end-start);
     }
 
+    /**
+     * Prints inserted string to file set in setWriter()
+     * @param string - String to write to file
+     */
     public void println(String string){
         pw.println(string);
     }
