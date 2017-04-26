@@ -36,6 +36,17 @@ public class Test<Type> extends Task<Type>{
     }
 
     /**
+     * Creates a new new default test with a max of 100 and increment of 1
+     * @param title - Title of Test
+     */
+    public Test(String title){
+        max_and_increment = new Pair<>(100,1);
+        total = new Long(0);
+        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+        updateTitle(title);
+    }
+
+    /**
      * Creates a new basic test with callable function in it and desired max and increment
      * @param callable - Callable method to test
      * @param max - Max Number of Tests
@@ -46,6 +57,21 @@ public class Test<Type> extends Task<Type>{
         max_and_increment = new Pair<>(max,increment);
         total = new Long(0);
         updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+    }
+
+    /**
+     * Creates a new basic test with callable function in it and desired max and increment
+     * @param title - Title of test
+     * @param callable - Callable method to test
+     * @param max - Max Number of Tests
+     * @param increment - Increment tests by ammount
+     */
+    public Test(String title, Callable callable, int max, int increment){
+        this.function = callable;
+        max_and_increment = new Pair<>(max,increment);
+        total = new Long(0);
+        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+        updateTitle(title);
     }
 
     /**
@@ -60,6 +86,32 @@ public class Test<Type> extends Task<Type>{
     }
 
     /**
+     * Creates a new Basic test with callable function in it and defaul max and increment
+     * @param title - Title of test
+     * @param callable - Callable method to test
+     */
+    public Test(String title, Callable callable){
+        this.function = callable;
+        max_and_increment = new Pair<>(100,10);
+        total = new Long(0);
+        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+        updateTitle(title);
+    }
+
+    /**
+     * Creates new test with max and increment
+     * @param title - Title of Test
+     * @param max - Max Number of Tests
+     * @param increment - Increment tests by ammount
+     */
+    public Test(String title, int max, int increment){
+        max_and_increment = new Pair<>(max,increment);
+        total = new Long(0);
+        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+        updateTitle(title);
+    }
+
+    /**
      * Creates new test with max and increment
      * @param max - Max Number of Tests
      * @param increment - Increment tests by ammount
@@ -67,15 +119,6 @@ public class Test<Type> extends Task<Type>{
     public Test(int max, int increment){
         max_and_increment = new Pair<>(max,increment);
         total = new Long(0);
-        Button button = new Button("Settings");
-        button.setOnAction(e ->{
-            EditPrompt editPrompt = new EditPrompt(getMax(),getIncrement());
-            Pair<Integer, Integer> temp = editPrompt.showPrompt();
-            if(temp != max_and_increment) {
-                max_and_increment = temp;
-                updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
-            }
-        });
         updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
     }
 
@@ -117,7 +160,9 @@ public class Test<Type> extends Task<Type>{
     protected Type call() throws Exception {
         for(int i = 0; i<getMax(); i+=getIncrement()){
             updateProgress(i);
-            function.call();
+            if(function != null) {
+                function.call();
+            }
         }
         return null;
     }

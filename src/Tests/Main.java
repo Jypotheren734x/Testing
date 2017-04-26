@@ -1,34 +1,23 @@
 package Tests;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
-
 
 /**
- * @author Nickolas Komarnitsky
+ * @Author Nickolas Komarnitsky
  * Testing.Tests
- * 4/24/2017
- * 2:07 PM
+ * 4/26/2017
+ * 2:45 AM
  */
-public class Main extends Application {
-
+public class Main {
     public static void main(String[] args){
-        launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage = new Stage();
-        Timing timing = new Timing();
-        timing.addTests(new Test<Void>(() -> {
+        new Thread(() -> Application.launch(Timing.class)).start();
+        Timing.addTests(
+        new Test(() ->{
             Thread.sleep(500);
             return null;
-        },100,1));
-        timing.setExec();
-        Scene scene = new Scene(timing);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        },100,1),
+        new Test(),
+        new Test(400,10)
+        );
     }
 }
