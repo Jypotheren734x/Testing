@@ -26,4 +26,5 @@ public class Example extends Application{
       primaryStage.setScene(new Scene(testPane));
       primaryStage.show();
   }
+}
 ```
