@@ -6,7 +6,7 @@ I made this project to make running timing tests or any other sort of test easie
 
 # Instructions
 To use this framework, you only have to use a few lines of code.
-'''Java
+```Java
 public class Example extends Application{
   public static void main(String[] args){
     launch(args);
@@ -26,4 +26,4 @@ public class Example extends Application{
       primaryStage.setScene(new Scene(testPane));
       primaryStage.show();
   }
-'''
+```
