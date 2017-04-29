@@ -21,6 +21,7 @@ public class Example extends Application{
         new Test(),
         new Test(400,10)
         );
+        testPane.setExec();
         primaryStage.setScene(new Scene(testPane));
         primaryStage.show();
     }
