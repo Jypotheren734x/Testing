@@ -1,14 +1,21 @@
 package Tests;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart.Data;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.util.Pair;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
@@ -25,14 +32,16 @@ public class Test<Type> extends Task<Type>{
     private Long start, end, total;
     private Pair<Integer, Integer> max_and_increment;
     private Callable function;
+    private LineChart dataPane;
+    private ArrayList<Series> series = new ArrayList<>();
+
 
     /**
      * Creates a new new default test with a max of 100 and increment of 1
      */
     public Test(){
         max_and_increment = new Pair<>(100,1);
-        total = new Long(0);
-        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+        setup();
     }
 
     /**
@@ -41,9 +50,8 @@ public class Test<Type> extends Task<Type>{
      */
     public Test(String title){
         max_and_increment = new Pair<>(100,1);
-        total = new Long(0);
-        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
         updateTitle(title);
+        setup();
     }
 
     /**
@@ -55,8 +63,7 @@ public class Test<Type> extends Task<Type>{
     public Test(Callable callable, int max, int increment){
         this.function = callable;
         max_and_increment = new Pair<>(max,increment);
-        total = new Long(0);
-        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+        setup();
     }
 
     /**
@@ -69,9 +76,8 @@ public class Test<Type> extends Task<Type>{
     public Test(String title, Callable callable, int max, int increment){
         this.function = callable;
         max_and_increment = new Pair<>(max,increment);
-        total = new Long(0);
-        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
         updateTitle(title);
+        setup();
     }
 
     /**
@@ -81,8 +87,6 @@ public class Test<Type> extends Task<Type>{
     public Test(Callable callable){
         this.function = callable;
         max_and_increment = new Pair<>(100,10);
-        total = new Long(0);
-        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
     }
 
     /**
@@ -93,9 +97,8 @@ public class Test<Type> extends Task<Type>{
     public Test(String title, Callable callable){
         this.function = callable;
         max_and_increment = new Pair<>(100,10);
-        total = new Long(0);
-        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
         updateTitle(title);
+        setup();
     }
 
     /**
@@ -106,9 +109,8 @@ public class Test<Type> extends Task<Type>{
      */
     public Test(String title, int max, int increment){
         max_and_increment = new Pair<>(max,increment);
-        total = new Long(0);
-        updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
         updateTitle(title);
+        setup();
     }
 
     /**
@@ -118,8 +120,15 @@ public class Test<Type> extends Task<Type>{
      */
     public Test(int max, int increment){
         max_and_increment = new Pair<>(max,increment);
+        setup();
+    }
+
+    private void setup(){
         total = new Long(0);
         updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+        dataPane = new LineChart(new NumberAxis(), new NumberAxis());
+        dataPane.titleProperty().bind(titleProperty());
+        dataPane.setCreateSymbols(false);
     }
 
     /**
@@ -163,6 +172,8 @@ public class Test<Type> extends Task<Type>{
             if(function != null) {
                 function.call();
             }
+            updateData(new Data(i,getTotal()),0);
+            updateData(new Data(i,getMax()),1);
         }
         return null;
     }
@@ -172,9 +183,19 @@ public class Test<Type> extends Task<Type>{
         super.succeeded();
         updateMessage("Done");
         updateProgress(getMax(),getMax());
+        for(Series series : series) {
+            dataPane.getData().add(series);
+        }
         if(pw != null) {
             pw.close();
         }
+    }
+
+    public void updateData(Data data, int index){
+        if(series == null){
+            series.set(index, new Series());
+        }
+        series.get(index).getData().add(data);
     }
 
     /**
@@ -231,13 +252,8 @@ public class Test<Type> extends Task<Type>{
         return max_and_increment.getKey();
     }
 
-    private static class Control extends HBox{
-        Button settings, launch, stop;
-        public Control(){
-            settings = new Button("Settings");
-            launch = new Button("Run");
-            stop = new Button("Stop");
-        }
+    public LineChart getDataPane() {
+        return dataPane;
     }
 
     private static class EditPrompt extends Dialog<Pair<Integer, Integer>> {

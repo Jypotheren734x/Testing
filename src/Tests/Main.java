@@ -1,6 +1,9 @@
 package Tests;
 
+
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * @Author Nickolas Komarnitsky
@@ -8,16 +11,26 @@ import javafx.application.Application;
  * 4/26/2017
  * 2:45 AM
  */
-public class Main {
+public class Main extends Application{
     public static void main(String[] args){
-        new Thread(() -> Application.launch(Timing.class)).start();
-        Timing.addTests(
-        new Test(() ->{
-            Thread.sleep(500);
-            return null;
-        },100,1),
-        new Test(),
-        new Test(400,10)
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage = new Stage();
+        TestPane root = new TestPane();
+        root.addTests(
+                new Test("Test 1",() ->{
+                    Thread.sleep(500);
+                    return null;
+                },100,1),
+                new Test("Test 2"),
+                new Test("Test 3",400,10)
         );
+        root.setExec();
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }
