@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -33,7 +34,7 @@ public class Test<Type> extends Task<Type>{
     private Pair<Integer, Integer> max_and_increment;
     private Callable function;
     private LineChart dataPane;
-    private ArrayList<Series> series = new ArrayList<>();
+    private HashMap<String, Series> series = new HashMap<>();
 
 
     /**
@@ -157,6 +158,7 @@ public class Test<Type> extends Task<Type>{
     protected void failed(){
         super.failed();
         updateMessage(getException().getMessage());
+        getException().printStackTrace();
     }
 
     @Override
@@ -170,10 +172,11 @@ public class Test<Type> extends Task<Type>{
         for(int i = 0; i<getMax(); i+=getIncrement()){
             updateProgress(i);
             if(function != null) {
+                start();
                 function.call();
+                end();
             }
-            updateData(new Data(i,getTotal()),0);
-            updateData(new Data(i,getMax()),1);
+            updateData(new Data(i,getTotal()),"Time");
         }
         return null;
     }
@@ -183,19 +186,26 @@ public class Test<Type> extends Task<Type>{
         super.succeeded();
         updateMessage("Done");
         updateProgress(getMax(),getMax());
-        for(Series series : series) {
-            dataPane.getData().add(series);
+        for(Series series : series.values()) {
+                dataPane.getData().add(series);
         }
         if(pw != null) {
             pw.close();
         }
     }
 
-    public void updateData(Data data, int index){
-        if(series == null){
-            series.set(index, new Series());
+    /**
+     * Adds data to coresponding series
+     * @param data - XYChart.Data containing the desired data
+     * @param name - Title of the Series to add data to
+     */
+    public void updateData(Data data, String name){
+        if(!series.containsKey(name)){
+            series.put(name, new Series());
+            series.get(name).setName(name);
+        }else {
+            series.get(name).getData().add(data);
         }
-        series.get(index).getData().add(data);
     }
 
     /**
