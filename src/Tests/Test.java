@@ -1,22 +1,19 @@
 package Tests;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
@@ -34,6 +31,7 @@ public class Test<Type> extends Task<Type>{
     private Pair<Integer, Integer> max_and_increment;
     private Callable function;
     private LineChart dataPane;
+    private TableView<Data> tableView;
     private HashMap<String, Series> series = new HashMap<>();
 
 
@@ -127,6 +125,8 @@ public class Test<Type> extends Task<Type>{
     private void setup(){
         total = new Long(0);
         updateMessage("Max: " + getMax() + "\nIncrement: " + getIncrement());
+        tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         dataPane = new LineChart(new NumberAxis(), new NumberAxis());
         dataPane.titleProperty().bind(titleProperty());
         dataPane.setCreateSymbols(false);
@@ -186,8 +186,15 @@ public class Test<Type> extends Task<Type>{
         super.succeeded();
         updateMessage("Done");
         updateProgress(getMax(),getMax());
+        TableColumn xCollumn =  new TableColumn("X");
+        xCollumn.setCellValueFactory(new PropertyValueFactory<>("xValue"));
+        tableView.getColumns().add(xCollumn);
         for(Series series : series.values()) {
-                dataPane.getData().add(series);
+            dataPane.getData().add(series);
+            TableColumn tableColumn = new TableColumn(series.getName());
+            tableColumn.setCellValueFactory(new PropertyValueFactory<>("yValue"));
+            tableView.getColumns().add(tableColumn);
+            tableView.getItems().addAll(series.getData());
         }
         if(pw != null) {
             pw.close();
@@ -231,6 +238,7 @@ public class Test<Type> extends Task<Type>{
      * Sets start to current nanotime
      */
     public void start(){
+        total = new Long(0);
         start = System.nanoTime();
     }
 
@@ -264,6 +272,10 @@ public class Test<Type> extends Task<Type>{
 
     public LineChart getDataPane() {
         return dataPane;
+    }
+
+    public TableView<Data> getTableView() {
+        return tableView;
     }
 
     private static class EditPrompt extends Dialog<Pair<Integer, Integer>> {
